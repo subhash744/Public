@@ -19,7 +19,8 @@ export default function ProfileCreationPage() {
   const [avatar, setAvatar] = useState("")
   const [social, setSocial] = useState({ x: "", github: "", website: "", linkedin: "" })
   const [goal, setGoal] = useState({ title: "", description: "", progressPercent: 0 })
-  const [showCompletionConfetti, setShowCompletionConfetti] = useState(false)
+  const [location, setLocation] = useState({ lat: 0, lng: 0, city: "", country: "" })
+  const [useCurrentLocation, setUseCurrentLocation] = useState(true)
 
   useEffect(() => {
     const currentUser = getCurrentUser()
@@ -36,6 +37,7 @@ export default function ProfileCreationPage() {
     setInterests(currentUser.interests || [])
     setSocial(currentUser.social || { x: "", github: "", website: "", linkedin: "" })
     setGoal(currentUser.goal || { title: "", description: "", progressPercent: 0 })
+    setLocation(currentUser.location || { lat: 0, lng: 0, city: "", country: "" })
   }, [router])
 
   const handleNext = () => {
@@ -62,6 +64,7 @@ export default function ProfileCreationPage() {
         avatar,
         social,
         goal: goal.title ? goal : undefined,
+        location: location.lat !== 0 && location.lng !== 0 ? location : undefined,
       }
       saveUserProfile(updatedUser)
       
@@ -93,12 +96,35 @@ export default function ProfileCreationPage() {
     setInterests(interests.includes(interest) ? interests.filter((i) => i !== interest) : [...interests, interest])
   }
 
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // In a real app, you would reverse geocode the coordinates to get city/country
+          // For now, we'll just store the coordinates
+          setLocation({
+            ...location,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          })
+        },
+        (error) => {
+          console.error("Error getting location:", error)
+          alert("Unable to get your location. Please enter manually.")
+          setUseCurrentLocation(false)
+        }
+      )
+    } else {
+      alert("Geolocation is not supported by your browser. Please enter manually.")
+      setUseCurrentLocation(false)
+    }
+  }
+
   const updateSocial = (field: string, value: string) => {
     setSocial({ ...social, [field]: value })
   }
 
   const interestOptions = [
-    "Technology",
     "Design",
     "Business",
     "Art",
@@ -121,12 +147,12 @@ export default function ProfileCreationPage() {
       {/* Header */}
       <div className="border-b border-rgba(55,50,47,0.12) px-6 py-4">
         <h1 className="text-2xl font-semibold text-[#37322F]">Create Your Profile</h1>
-        <p className="text-sm text-[#605A57]">Step {step} of 8</p>
+        <p className="text-sm text-[#605A57]">Step {step} of 9</p>
       </div>
 
       {/* Progress bar */}
       <div className="h-1 bg-[#E0DEDB]">
-        <div className="h-full bg-[#37322F] transition-all" style={{ width: `${(step / 8) * 100}%` }}></div>
+        <div className="h-full bg-[#37322F] transition-all" style={{ width: `${(step / 9) * 100}%` }}></div>
       </div>
 
       {/* Content */}
@@ -365,32 +391,96 @@ export default function ProfileCreationPage() {
             </div>
           )}
 
-          {/* Navigation buttons */}
-          <div className="flex gap-4 mt-8">
-            {step > 1 && (
-              <button
-                onClick={handleBack}
-                className="flex-1 py-3 border border-[#E0DEDB] text-[#37322F] rounded-lg font-medium hover:bg-white transition"
-              >
-                Back
-              </button>
-            )}
-            {step < 8 ? (
-              <button
-                onClick={handleNext}
-                className="flex-1 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition"
-              >
-                Next
-              </button>
-            ) : (
-              <button
-                onClick={handleComplete}
-                className="flex-1 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition"
-              >
-                Complete
-              </button>
-            )}
-          </div>
+          {/* Step 9: Location */}
+          {step === 9 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-semibold text-[#37322F] mb-2">Where are you based?</h2>
+                <p className="text-[#605A57] mb-4">Add your location to appear on the global builder map (optional)</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="useLocation"
+                    checked={useCurrentLocation}
+                    onChange={(e) => setUseCurrentLocation(e.target.checked)}
+                    className="w-4 h-4 text-[#37322F] rounded focus:ring-[#37322F]"
+                  />
+                  <label htmlFor="useLocation" className="text-[#37322F]">
+                    Use my current location
+                  </label>
+                </div>
+                
+                {useCurrentLocation ? (
+                  <button
+                    onClick={getCurrentLocation}
+                    className="w-full py-3 bg-white border border-[#E0DEDB] text-[#37322F] rounded-lg font-medium hover:bg-[#F7F5F3] transition flex items-center justify-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    Get Current Location
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={location.city}
+                      onChange={(e) => setLocation({...location, city: e.target.value})}
+                      className="w-full px-4 py-2 border border-[#E0DEDB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#37322F]"
+                      placeholder="City"
+                    />
+                    <input
+                      type="text"
+                      value={location.country}
+                      onChange={(e) => setLocation({...location, country: e.target.value})}
+                      className="w-full px-4 py-2 border border-[#E0DEDB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#37322F]"
+                      placeholder="Country"
+                    />
+                  </div>
+                )}
+                
+                {(location.lat !== 0 || location.city) && (
+                  <div className="p-3 bg-[#F7F5F3] rounded-lg">
+                    <p className="text-sm text-[#37322F]">
+                      {location.city && location.country 
+                        ? `${location.city}, ${location.country}`
+                        : location.city || "Location set"}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Navigation buttons */}
+        <div className="flex gap-4 mt-8">
+          {step > 1 && (
+            <button
+              onClick={handleBack}
+              className="flex-1 py-3 border border-[#E0DEDB] text-[#37322F] rounded-lg font-medium hover:bg-white transition"
+            >
+              Back
+            </button>
+          )}
+          {step < 9 ? (
+            <button
+              onClick={handleNext}
+              className="flex-1 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition"
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              onClick={handleComplete}
+              className="flex-1 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition"
+            >
+              Complete
+            </button>
+          )}
         </div>
       </div>
     </div>

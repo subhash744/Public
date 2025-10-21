@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, usePathname } from "next/navigation"
-import { getCurrentUser } from "@/lib/storage"
+import { getCurrentUser, logoutUser } from "@/lib/storage"
 import { useState, useEffect } from "react"
 
 export default function Navigation() {
@@ -16,6 +16,12 @@ export default function Navigation() {
     setCurrentUser(user)
   }, [])
 
+  const handleLogout = () => {
+    logoutUser()
+    setCurrentUser(null)
+    router.push("/")
+  }
+
 
   if (!mounted) return null
 
@@ -24,6 +30,7 @@ export default function Navigation() {
     { label: "Leaderboard", href: "/leaderboard" },
     { label: "Hall of Fame", href: "/hall" },
     { label: "Dashboard", href: "/dashboard" },
+    { label: "Map", href: "/map" },
   ]
 
   return (
@@ -59,6 +66,12 @@ export default function Navigation() {
                 className="w-8 h-8 rounded-full bg-[#E0DEDB] flex items-center justify-center text-xs font-semibold text-[#37322F]"
               >
                 {currentUser.displayName.charAt(0)}
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-white border border-[#E0DEDB] text-[#37322F] rounded-full text-sm font-medium hover:bg-[#F7F5F3] transition"
+              >
+                Logout
               </button>
             </>
           ) : (
