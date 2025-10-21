@@ -25,7 +25,10 @@ export default function LeaderboardPage() {
     
     // Load leaderboard data for all users (public access)
     updateLeaderboard("all-time")
-    setFeatured(getFeaturedBuilders())
+    
+    // Only show featured builders if real users exist
+    const featuredBuilders = getFeaturedBuilders()
+    setFeatured(featuredBuilders)
   }, [])
 
   const updateLeaderboard = (sort: SortBy) => {

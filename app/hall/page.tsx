@@ -87,6 +87,18 @@ export default function HallOfFamePage() {
                 <p className="text-[#605A57]">Loading profiles...</p>
               </div>
             </div>
+          ) : users.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="text-8xl mb-6">🏛️</div>
+              <h2 className="text-3xl font-serif text-[#37322F] mb-4">The Hall Awaits</h2>
+              <p className="text-lg text-[#605A57] mb-8">No builders yet. Be the first to claim your frame!</p>
+              <button
+                onClick={() => router.push('/profile-creation')}
+                className="px-8 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition"
+              >
+                Create Your Profile
+              </button>
+            </div>
           ) : (
             <>
               {/* 7-Column Grid (responsive) */}

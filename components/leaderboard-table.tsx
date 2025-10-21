@@ -118,8 +118,16 @@ export default function LeaderboardTable({ entries, currentUserId }: Leaderboard
         </tbody>
       </table>
       {entries.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-[#605A57]">No profiles yet. Be the first to join!</p>
+        <div className="text-center py-16">
+          <div className="text-6xl mb-4">🏆</div>
+          <h3 className="text-2xl font-semibold text-[#37322F] mb-2">No profiles yet</h3>
+          <p className="text-[#605A57] mb-6">Be the first builder to join the leaderboard!</p>
+          <button
+            onClick={() => window.location.href = '/profile-creation'}
+            className="px-6 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition"
+          >
+            Create Your Profile
+          </button>
         </div>
       )}
     </div>

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import LoginModal from "@/components/login-modal"
 import Navigation from "@/components/navigation"
 import { getCurrentUser, getAllUsers } from "@/lib/storage"
-import { initializeMockData } from "@/lib/init-mock-data"
 import { updateStreaks } from "@/lib/storage"
 import FullscreenConfetti from "@/components/fullscreen-confetti"
 
@@ -19,13 +18,8 @@ export default function LandingPage() {
   useEffect(() => {
     setMounted(true)
     updateStreaks()
-    // Only initialize mock data if no users exist (first time visit)
-    const existingUsers = getAllUsers()
-    if (existingUsers.length === 0) {
-      initializeMockData()
-      // Show welcome confetti for first-time visitors
-      setShowWelcomeConfetti(true)
-    }
+    // Do NOT auto-initialize mock data - let users create real profiles
+    // Mock data can only be added manually via /dev-tools
     const user = getCurrentUser()
     if (user) {
       setCurrentUser(user)
