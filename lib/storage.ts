@@ -103,11 +103,6 @@ const migrateUserSchema = (user: any): UserProfile => {
   }
 }
 
-export const logoutUser = () => {
-  if (typeof window === "undefined") return
-  localStorage.removeItem("currentUser")
-}
-
 export const getCurrentUser = (): UserProfile | null => {
   if (typeof window === "undefined") return null
   const user = localStorage.getItem("currentUser")
@@ -486,6 +481,12 @@ export const resetAllData = () => {
   localStorage.removeItem("allUsers")
   localStorage.removeItem("currentUser")
   localStorage.removeItem("upvotes")
+}
+
+export const logout = () => {
+  if (typeof window === "undefined") return
+  localStorage.removeItem("currentUser")
+  window.location.reload()
 }
 
 export const getStorageSchema = () => {
