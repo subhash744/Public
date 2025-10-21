@@ -1,3 +1,12 @@
+/**
+ * DEVELOPMENT ONLY - Mock Data Generator
+ * 
+ * This file generates fake user profiles for testing and development.
+ * It should ONLY be used via /dev-tools route which is disabled in production.
+ * 
+ * DO NOT import or use this in production code.
+ */
+
 import { getAllUsers, saveUserProfile, generateUserId, generateBadges } from "./storage"
 
 const mockNames = [

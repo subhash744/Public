@@ -85,7 +85,7 @@ export default function TestimonialsSection() {
                 transform: isTransitioning ? "scale(0.95)" : "scale(1)",
                 transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out",
               }}
-              src={testimonials[activeTestimonial].image || "/placeholder.jpg"}
+              src={testimonials[activeTestimonial].image}
               alt={testimonials[activeTestimonial].name}
             />
             <div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)] overflow-hidden flex flex-col justify-start items-start gap-6 shadow-none pb-0 pt-0">

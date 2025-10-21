@@ -1,4 +1,5 @@
 "use client"
+"use client"
 
 import { useState, useEffect } from "react"
 import {
@@ -14,6 +15,20 @@ import { initializeMockData } from "@/lib/init-mock-data"
 import Navigation from "@/components/navigation"
 
 export default function DevToolsPage() {
+  // Hide dev tools in production
+  if (process.env.NODE_ENV === 'production') {
+    return (
+      <div className="w-full min-h-screen bg-[#F7F5F3] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-serif text-[#37322F] mb-4">Access Denied</h1>
+          <p className="text-[#605A57] mb-6">Developer tools are not available in production.</p>
+          <a href="/" className="px-6 py-3 bg-[#37322F] text-white rounded-lg font-medium hover:bg-[#2a2520] transition inline-block">
+            Go Home
+          </a>
+        </div>
+      </div>
+    )
+  }
   const [schema, setSchema] = useState<any>(null)
   const [featured, setFeatured] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)

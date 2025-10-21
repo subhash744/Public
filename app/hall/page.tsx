@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { getAllUsers, getCurrentUser } from "@/lib/storage"
+import { cleanupLegacyData } from "@/lib/cleanup-legacy-data"
 import { useRouter } from "next/navigation"
 import Navigation from "@/components/navigation"
 
@@ -17,6 +18,10 @@ export default function HallOfFamePage() {
 
   useEffect(() => {
     setMounted(true)
+    
+    // Clean up legacy fake data
+    cleanupLegacyData()
+    
     const allUsers = getAllUsers()
     const user = getCurrentUser()
     setCurrentUser(user)

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { getCurrentUser, getLeaderboard, getFeaturedBuilders } from "@/lib/storage"
+import { cleanupLegacyData } from "@/lib/cleanup-legacy-data"
 import LeaderboardTable from "@/components/leaderboard-table"
 import Navigation from "@/components/navigation"
 import { updateStreaks } from "@/lib/storage"
@@ -19,6 +20,10 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     setMounted(true)
+    
+    // Clean up legacy fake data
+    cleanupLegacyData()
+    
     updateStreaks()
     const user = getCurrentUser()
     setCurrentUser(user)

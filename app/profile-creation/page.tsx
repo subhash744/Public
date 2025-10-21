@@ -157,11 +157,17 @@ export default function ProfileCreationPage() {
                 <p className="text-[#605A57] mb-4">Select from preset avatars or upload your own</p>
               </div>
               <div className="flex justify-center mb-6">
-                <img
-                  src={avatar || "/placeholder.jpg"}
-                  alt="Avatar"
-                  className="w-24 h-24 rounded-full border-4 border-[#E0DEDB]"
-                />
+                {avatar ? (
+                  <img
+                    src={avatar}
+                    alt="Avatar"
+                    className="w-24 h-24 rounded-full border-4 border-[#E0DEDB]"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full border-4 border-[#E0DEDB] bg-gradient-to-br from-[#E0DEDB] to-[#D0CECC] flex items-center justify-center text-3xl font-semibold text-[#37322F]">
+                    {displayName.charAt(0).toUpperCase() || '?'}
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-3 gap-4">
                 {["avataaars", "adventurer", "big-ears"].map((style) => (

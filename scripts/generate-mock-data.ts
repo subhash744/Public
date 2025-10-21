@@ -1,4 +1,13 @@
 // Script to generate 15 mock user profiles with realistic data
+/**
+ * DEVELOPMENT ONLY - Mock Data Script
+ * 
+ * This utility generates fake user profiles for testing purposes.
+ * Use only in development environment via dev-tools.
+ * 
+ * DO NOT use in production.
+ */
+
 import { saveUserProfile, generateUserId, generateBadges } from "@/lib/storage"
 
 const mockNames = [

@@ -6,6 +6,7 @@ import LoginModal from "@/components/login-modal"
 import Navigation from "@/components/navigation"
 import { getCurrentUser, getAllUsers } from "@/lib/storage"
 import { updateStreaks } from "@/lib/storage"
+import { cleanupLegacyData } from "@/lib/cleanup-legacy-data"
 import FullscreenConfetti from "@/components/fullscreen-confetti"
 
 export default function LandingPage() {
@@ -17,6 +18,10 @@ export default function LandingPage() {
 
   useEffect(() => {
     setMounted(true)
+    
+    // ONE-TIME: Clean up any legacy fake data from localStorage
+    cleanupLegacyData()
+    
     updateStreaks()
     // Do NOT auto-initialize mock data - let users create real profiles
     // Mock data can only be added manually via /dev-tools

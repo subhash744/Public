@@ -52,12 +52,17 @@ export default function ProjectCard({ project, userId, onUpvote }: ProjectCardPr
     >
       {project.bannerUrl ? (
         <img
-          src={project.bannerUrl || "/placeholder.jpg"}
+          src={project.bannerUrl}
           alt={project.title}
           className="w-full h-40 object-cover group-hover:scale-105 transition-transform"
         />
       ) : (
-        <div className="w-full h-40 bg-gradient-to-br from-[#E0DEDB] to-[#D0CECC]" />
+        <div className="w-full h-40 bg-gradient-to-br from-[#E0DEDB] to-[#D0CECC] flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-4xl mb-2">📦</div>
+            <p className="text-sm text-[#605A57] font-medium">{project.title}</p>
+          </div>
+        </div>
       )}
 
       <div className="p-4">
