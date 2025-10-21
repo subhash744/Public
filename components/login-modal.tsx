@@ -40,15 +40,16 @@ export default function LoginModal({ onClose }: LoginModalProps) {
       }
 
       // Simple password check (in real app, would be hashed)
-      if (user.username !== username) {
+      // For demo purposes, we'll check the stored password
+      if (user && user.password === password) {
+        setCurrentUser(user)
+        onClose()
+        router.push("/dashboard")
+      } else {
         setError("Invalid credentials")
         setIsLoading(false)
         return
       }
-
-      setCurrentUser(user)
-      onClose()
-      router.push("/dashboard")
     } else {
       // Signup: create new user
       if (!displayName) {
@@ -88,7 +89,8 @@ export default function LoginModal({ onClose }: LoginModalProps) {
         lastSeenDate: new Date().toISOString().split('T')[0],
         dailyViews: [],
         dailyUpvotes: [],
-        schemaVersion: 1
+        schemaVersion: 3,  // Updated to current schema version
+        password: password  // Store password (demo purposes only)
       }
 
       saveUserProfile(newUser)

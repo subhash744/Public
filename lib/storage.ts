@@ -55,6 +55,8 @@ export interface UserProfile {
   metrics?: {
     mapClicks: number
   }
+  // For demo purposes only - in real app, passwords should be hashed and stored separately
+  password?: string
 }
 
 export interface LeaderboardEntry {
@@ -461,7 +463,7 @@ export const getUserAnalytics = (userId: string): AnalyticsData | null => {
     title: p.title,
     views: p.views,
     upvotes: p.upvotes,
-    ctr: p.views > 0 ? ((p.upvotes / p.views) * 100).toFixed(2) : "0",
+    ctr: p.views > 0 ? Number(((p.upvotes / p.views) * 100).toFixed(2)) : 0,
   }))
 
   return {
@@ -481,12 +483,6 @@ export const resetAllData = () => {
   localStorage.removeItem("allUsers")
   localStorage.removeItem("currentUser")
   localStorage.removeItem("upvotes")
-}
-
-export const logout = () => {
-  if (typeof window === "undefined") return
-  localStorage.removeItem("currentUser")
-  window.location.reload()
 }
 
 export const getStorageSchema = () => {
