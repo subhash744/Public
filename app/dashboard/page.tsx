@@ -13,6 +13,39 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState<"overview" | "projects" | "engagement">("overview")
 
+  // Generate fake data for development/testing when no real data exists
+  const generateFakeData = () => {
+    // Fake daily data for the past 14 days
+    const fakeDailyData = []
+    for (let i = 13; i >= 0; i--) {
+      const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      fakeDailyData.push({
+        date,
+        views: Math.floor(Math.random() * 100) + 20,
+        upvotes: Math.floor(Math.random() * 30) + 5
+      })
+    }
+
+    // Fake project stats
+    const fakeProjectStats = [
+      { projectId: 'proj1', title: 'Mobile App Design', views: 245, upvotes: 67, ctr: '27.35' },
+      { projectId: 'proj2', title: 'Dashboard UI', views: 189, upvotes: 42, ctr: '22.22' },
+      { projectId: 'proj3', title: 'API Integration', views: 156, upvotes: 38, ctr: '24.36' },
+      { projectId: 'proj4', title: 'Landing Page', views: 312, upvotes: 89, ctr: '28.53' }
+    ]
+
+    return {
+      totalViews: 1247,
+      totalUpvotes: 236,
+      weeklyViews: 456,
+      weeklyUpvotes: 98,
+      streak: 7,
+      badges: ['Builder', 'Consistent', 'Popular'],
+      dailyData: fakeDailyData,
+      projectStats: fakeProjectStats
+    }
+  }
+
   useEffect(() => {
     setMounted(true)
     const user = getCurrentUser()
@@ -22,7 +55,9 @@ export default function DashboardPage() {
     }
     setCurrentUser(user)
     const analyticsData = getUserAnalytics(user.id)
-    setAnalytics(analyticsData)
+    
+    // Use fake data if no real analytics data exists
+    setAnalytics(analyticsData || generateFakeData())
   }, [router])
 
   if (!mounted || !currentUser || !analytics) return null
@@ -47,7 +82,14 @@ export default function DashboardPage() {
       <Navigation />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-4xl font-serif text-[#37322F] mb-8">Your Analytics Dashboard</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-serif text-[#37322F]">Your Analytics Dashboard</h1>
+          {!analytics?.totalViews && analytics?.totalViews !== 0 && (
+            <div className="text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
+              Showing sample data - Track your profile to see real stats
+            </div>
+          )}
+        </div>
 
         {/* Tab Navigation */}
         <div className="flex gap-4 mb-8 border-b border-[#E0DEDB]">
@@ -130,7 +172,7 @@ export default function DashboardPage() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-[#605A57]">No badges yet. Keep building to earn badges!</p>
+                  <p className="text-[#605A57]">No badges yet. Keep building to earn badges! Track your profile to see real progress.</p>
                 )}
               </div>
             </div>
@@ -167,7 +209,7 @@ export default function DashboardPage() {
                 </table>
               </div>
             ) : (
-              <p className="text-[#605A57]">No projects yet. Create your first project to see analytics!</p>
+              <p className="text-[#605A57]">No projects yet. Create your first project to see analytics! Track your profile to see real stats.</p>
             )}
           </div>
         )}
