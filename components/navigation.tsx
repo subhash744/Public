@@ -23,7 +23,7 @@ export default function Navigation() {
     { label: "Home", href: "/" },
     { label: "Leaderboard", href: "/leaderboard" },
     { label: "Hall of Fame", href: "/hall" },
-    ...(currentUser ? [{ label: "Dashboard", href: "/dashboard" }] : []),
+    { label: "Dashboard", href: "/dashboard" },
   ]
 
   return (
